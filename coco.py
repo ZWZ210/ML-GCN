@@ -1,12 +1,12 @@
-import torch.utils.data as data
-import json
-import os
-import subprocess
-from PIL import Image
-import numpy as np
-import torch
-import pickle
-from util import *
+import torch.utils.data as data 导入PyTorch的utils.data 模块，并简称为data
+import json 导入Python的json模块,用于处理JSON格式的数据（读取和写入JSON文件）。
+import os 导入Python的os模块，用于与操作系统交互，比如文件路径操作、目录遍历等。
+import subprocess 导入Python的subprocess模块，用于创建子进程并执行外部命令（比如调用系统命令或运行其他程序）。
+from PIL import Image 从Python Imaging Library（Pillow库）导入Image模块，用于图像处理（如打开、保存、调整图像等）。
+import numpy as np 导入NumPy库，并简称为np。NumPy是Python中用于科学计算的核心库，提供多维数组和矩阵运算功能。
+import torch 导入PyTorch库，这是一个广泛使用的深度学习框架，支持张量计算、自动微分和GPU加速。
+import pickle 导入Python的pickle模块，用于对象的序列化和反序列化（将Python对象保存为文件或从文件加载对象）。
+from util import * 从util.py 文件中导入所有内容（*表示导入所有函数、类或变量）。
 
 urls = {'train_img':'http://images.cocodataset.org/zips/train2014.zip',
         'val_img' : 'http://images.cocodataset.org/zips/val2014.zip',
