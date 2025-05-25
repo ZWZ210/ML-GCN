@@ -12,32 +12,40 @@ urls = {'train_img':'http://images.cocodataset.org/zips/train2014.zip',
         'val_img' : 'http://images.cocodataset.org/zips/val2014.zip',
         'annotations':'http://images.cocodataset.org/annotations/annotations_trainval2014.zip'}
 
-def download_coco2014(root, phase):
-    if not os.path.exists(root):
+def download_coco2014(root, phase): root: 数据集存储的根目录（如 ./data/coco）。phase: 指定下载的数据类型，可以是 'train'（训练集）或 'val'（验证集）。
+
+    if not os.path.exists(root):  #如果根目录 root 不存在，则创建它。
         os.makedirs(root)
-    tmpdir = os.path.join(root, 'tmp/')
-    data = os.path.join(root, 'data/')
+    tmpdir = os.path.join(root, 'tmp/') # 临时下载目录
+    data = os.path.join(root, 'data/') # 最终数据存储目录
+    
     if not os.path.exists(data):
         os.makedirs(data)
     if not os.path.exists(tmpdir):
-        os.makedirs(tmpdir)
+        os.makedirs(tmpdir)  #确保 data/ 和 tmp/ 目录存在。
+        
     if phase == 'train':
         filename = 'train2014.zip'
     elif phase == 'val':
-        filename = 'val2014.zip'
-    cached_file = os.path.join(tmpdir, filename)
+        filename = 'val2014.zip' #根据 phase 选择下载 train2014.zip 或 val2014.zip。
+        
+    cached_file = os.path.join(tmpdir, filename) #cached_file 是 ZIP 文件的完整路径（如 ./data/coco/tmp/train2014.zip）
+    
     if not os.path.exists(cached_file):
-        print('Downloading: "{}" to {}\n'.format(urls[phase + '_img'], cached_file))
-        os.chdir(tmpdir)
-        subprocess.call('wget ' + urls[phase + '_img'], shell=True)
-        os.chdir(root)
+        print('Downloading: "{}" to {}\n'.format(urls[phase + '_img'], cached_file)) #如果文件不存在，打印下载信息
+        
+        os.chdir(tmpdir) #切换到临时目录 tmpdir
+        subprocess.call('wget ' + urls[phase + '_img'], shell=True) #通过 wget 下载 COCO 数据集文件。
+        os.chdir(root) #切换回根目录 root
+        
     # extract file
-    img_data = os.path.join(data, filename.split('.')[0])
+    img_data = os.path.join(data, filename.split('.')[0]) #img_data 是解压后的目录路径（如 ./data/coco/data/train2014）
+    
     if not os.path.exists(img_data):
-        print('[dataset] Extracting tar file {file} to {path}'.format(file=cached_file, path=data))
-        command = 'unzip {} -d {}'.format(cached_file,data)
-        os.system(command)
-    print('[dataset] Done!')
+        print('[dataset] Extracting tar file {file} to {path}'.format(file=cached_file, path=data))#使用字符串格式化（.format()）输出解压的源文件和目标路径
+        command = 'unzip {} -d {}'.format(cached_file,data) #如果解压目录不存在，调用 unzip 解压文件到 data/
+        os.system(command) #os.system 执行解压命令
+    print('[dataset] Done!') #提示图像数据下载和解压完成。
 
     # train/val images/annotations
     cached_file = os.path.join(tmpdir, 'annotations_trainval2014.zip')
@@ -45,7 +53,11 @@ def download_coco2014(root, phase):
         print('Downloading: "{}" to {}\n'.format(urls['annotations'], cached_file))
         os.chdir(tmpdir)
         subprocess.Popen('wget ' + urls['annotations'], shell=True)
-        os.chdir(root)
+        os.chdir(root) 
+        #检查目标文件是否已存在（annotations_trainval2014.zip），如果不存在则下载。
+         使用 wget 命令下载文件，并保存到临时目录 tmpdir 中。
+         切换工作目录（os.chdir）以确保文件下载到正确位置，最后恢复原始目录。
+        
     annotations_data = os.path.join(data, 'annotations')
     if not os.path.exists(annotations_data):
         print('[dataset] Extracting tar file {file} to {path}'.format(file=cached_file, path=data))
